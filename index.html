@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Health Dashboard</title>
+<style>
+:root{--bg:#f5f7fb;--surface:#fff;--text:#172033;--muted:#7b8798;--line:#e9edf4;--blue:#4779e8;--teal:#19a69b;--lav:#8a72d6}
+*{box-sizing:border-box}
+body{margin:0;padding:30px 18px;background:var(--bg);font-family:Inter,system-ui,-apple-system,"Segoe UI",Tahoma,sans-serif;color:var(--text)}
+main{max-width:1080px;margin:auto}
+header{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:24px;flex-wrap:wrap}
+h1{font-size:30px;letter-spacing:-.7px;margin:0 0 5px}
+.subtitle{color:var(--muted);font-size:14px}
+.tag{background:#eaf0ff;color:#3866c8;padding:9px 14px;border-radius:999px;font-size:13px;font-weight:650}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:18px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:20px;box-shadow:0 8px 24px rgba(31,51,86,.035)}
+.k-label{font-size:13px;color:var(--muted);margin-bottom:12px}
+.k-value{font-size:29px;font-weight:750;letter-spacing:-.7px}
+.k-unit{font-size:13px;color:var(--muted);font-weight:500}
+.k-foot{font-size:12px;color:var(--muted);margin-top:7px}
+.layout{display:grid;grid-template-columns:1.4fr 1fr;gap:18px;margin-bottom:18px}
+h2{font-size:17px;margin:0 0 5px}
+.desc{font-size:12px;color:var(--muted);margin-bottom:18px}
+.chart-wrap{width:100%;overflow:hidden}
+svg{display:block;width:100%;height:auto}
+.gridline{stroke:#edf0f5;stroke-width:1}
+.axis-text{font-size:11px;fill:#8994a5}
+.sleep-line{fill:none;stroke:var(--blue);stroke-width:3.5;stroke-linecap:round;stroke-linejoin:round}
+.water-line{fill:none;stroke:var(--teal);stroke-width:3.5;stroke-linecap:round;stroke-linejoin:round}
+.sleep-dot{fill:var(--blue);stroke:#fff;stroke-width:2}
+.water-dot{fill:var(--teal);stroke:#fff;stroke-width:2}
+.legend{display:flex;gap:18px;flex-wrap:wrap;margin-top:12px;color:var(--muted);font-size:12px}
+.key{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px}
+.activity-summary{display:flex;align-items:center;gap:20px;min-height:180px}
+.donut{width:145px;height:145px;flex:none}
+.summary-list{display:grid;gap:15px;font-size:13px;color:#596579}
+.summary-list strong{display:block;color:var(--text);font-size:17px;margin-top:3px}
+.table-card{margin-bottom:18px}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{text-align:left;color:var(--muted);font-weight:600;font-size:12px;padding:12px 10px;border-bottom:1px solid var(--line)}
+td{padding:13px 10px;border-bottom:1px solid #f0f2f7}
+tbody tr:last-child td{border-bottom:0}
+td:first-child{font-weight:650;white-space:nowrap}
+.activity{font-weight:600}
+.note{padding:14px 16px;background:#f7f9ff;border:1px solid #e7edfb;border-radius:14px;color:#58677e;font-size:13px;line-height:1.7}
+footer{text-align:center;color:#a0a9b7;font-size:11px;margin-top:18px}
+@media(max-width:760px){body{padding:20px 12px}.kpis{grid-template-columns:repeat(2,1fr)}.layout{grid-template-columns:1fr}.card{padding:16px}h1{font-size:25px}}
+@media(max-width:420px){.k-value{font-size:25px}table{font-size:11px}th,td{padding:10px 5px}.activity-summary{gap:12px}.donut{width:120px;height:120px}}
+</style>
+</head>
+<body>
+<main>
+<header>
+ <div><h1>สุขภาพของฉัน</h1><div class="subtitle">Personal Health Dashboard · สรุปข้อมูล 7 วัน (7–13 ก.ย.)</div></div>
+ <div class="tag">น้ำหนักตัว 60 กก.</div>
+</header>
+
+<section class="kpis">
+ <div class="card"><div class="k-label">วันที่ออกกำลังกาย</div><div class="k-value">7 <span class="k-unit">/ 7 วัน</span></div><div class="k-foot">มีกิจกรรมทุกวัน</div></div>
+ <div class="card"><div class="k-label">เวลาออกกำลังกายรวม</div><div class="k-value">255 <span class="k-unit">นาที</span></div><div class="k-foot">เฉลี่ย 36.4 นาที/วัน</div></div>
+ <div class="card"><div class="k-label">ชั่วโมงนอนเฉลี่ย</div><div class="k-value">7.21 <span class="k-unit">ชม./คืน</span></div><div class="k-foot">เป้าหมายทั่วไป 7–9 ชั่วโมง</div></div>
+ <div class="card"><div class="k-label">น้ำดื่มเฉลี่ย</div><div class="k-value">1.59 <span class="k-unit">ลิตร/วัน</span></div><div class="k-foot">ปรับเพิ่มตามเหงื่อและกิจกรรม</div></div>
+</section>
+
+<section class="layout">
+ <div class="card">
+  <h2>แนวโน้มสุขภาพ 7 วัน</h2>
+  <div class="desc">ชั่วโมงนอนและปริมาณน้ำดื่มในแต่ละวัน</div>
+  <div class="chart-wrap">
+   <svg viewBox="0 0 760 245" role="img" aria-label="กราฟแนวโน้มชั่วโมงนอนและน้ำดื่ม 7 วัน">
+    <line class="gridline" x1="55" y1="35" x2="700" y2="35"/><line class="gridline" x1="55" y1="95" x2="700" y2="95"/><line class="gridline" x1="55" y1="155" x2="700" y2="155"/>
+    <text class="axis-text" x="12" y="39">8.5</text><text class="axis-text" x="12" y="99">7.25</text><text class="axis-text" x="20" y="159">6</text>
+    <text class="axis-text" x="705" y="39">1.9L</text><text class="axis-text" x="705" y="99">1.6L</text><text class="axis-text" x="705" y="159">1.3L</text>
+    <polyline class="sleep-line" points="65,83 170,107 275,131 380,83 485,59 590,83 685,131"/>
+    <polyline class="water-line" points="65,95 170,119 275,71 380,95 485,119 590,71 685,119"/>
+    <circle class="sleep-dot" cx="65" cy="83" r="5"/><circle class="sleep-dot" cx="170" cy="107" r="5"/><circle class="sleep-dot" cx="275" cy="131" r="5"/><circle class="sleep-dot" cx="380" cy="83" r="5"/><circle class="sleep-dot" cx="485" cy="59" r="5"/><circle class="sleep-dot" cx="590" cy="83" r="5"/><circle class="sleep-dot" cx="685" cy="131" r="5"/>
+    <circle class="water-dot" cx="65" cy="95" r="5"/><circle class="water-dot" cx="170" cy="119" r="5"/><circle class="water-dot" cx="275" cy="71" r="5"/><circle class="water-dot" cx="380" cy="95" r="5"/><circle class="water-dot" cx="485" cy="119" r="5"/><circle class="water-dot" cx="590" cy="71" r="5"/><circle class="water-dot" cx="685" cy="119" r="5"/>
+    <text class="axis-text" x="65" y="190" text-anchor="middle">7 ก.ย.</text><text class="axis-text" x="170" y="190" text-anchor="middle">8 ก.ย.</text><text class="axis-text" x="275" y="190" text-anchor="middle">9 ก.ย.</text><text class="axis-text" x="380" y="190" text-anchor="middle">10 ก.ย.</text><text class="axis-text" x="485" y="190" text-anchor="middle">11 ก.ย.</text><text class="axis-text" x="590" y="190" text-anchor="middle">12 ก.ย.</text><text class="axis-text" x="685" y="190" text-anchor="middle">13 ก.ย.</text>
+    <text class="axis-text" x="55" y="222">แกนซ้าย: ชั่วโมงนอน</text><text class="axis-text" x="700" y="222" text-anchor="end">แกนขวา: น้ำดื่ม</text>
+   </svg>
+  </div>
+  <div class="legend"><span><i class="key" style="background:var(--blue)"></i>ชั่วโมงนอน</span><span><i class="key" style="background:var(--teal)"></i>น้ำดื่ม</span></div>
+ </div>
+
+ <div class="card">
+  <h2>สัดส่วนการออกกำลังกาย</h2>
+  <div class="desc">เวลารวม 255 นาทีใน 7 วัน</div>
+  <div class="activity-summary">
+   <svg class="donut" viewBox="0 0 160 160" role="img" aria-label="วิ่ง 120 นาที ปั่นจักรยาน 135 นาที">
+    <circle cx="80" cy="80" r="57" fill="none" stroke="#edf1f7" stroke-width="19"/>
+    <circle cx="80" cy="80" r="57" fill="none" stroke="#4779e8" stroke-width="19" stroke-dasharray="168.5 358.1" transform="rotate(-90 80 80)"/>
+    <circle cx="80" cy="80" r="57" fill="none" stroke="#19a69b" stroke-width="19" stroke-dasharray="189.6 358.1" stroke-dashoffset="-168.5" transform="rotate(-90 80 80)"/>
+    <text x="80" y="77" text-anchor="middle" font-size="23" font-weight="750" fill="#172033">255</text><text x="80" y="96" text-anchor="middle" font-size="11" fill="#7b8798">นาที</text>
+   </svg>
+   <div class="summary-list">
+    <div><span><i class="key" style="background:var(--blue)"></i>วิ่ง</span><strong>120 นาที · 4 วัน</strong></div>
+    <div><span><i class="key" style="background:var(--teal)"></i>ปั่นจักรยาน</span><strong>135 นาที · 3 วัน</strong></div>
+   </div>
+  </div>
+  <div class="note">เวลารวม 255 นาที มากกว่าเกณฑ์กิจกรรมแอโรบิกขั้นต่ำ 150 นาที/สัปดาห์ หากความหนักอยู่ในระดับปานกลางขึ้นไป</div>
+ </div>
+</section>
+
+<section class="card table-card">
+ <h2>บันทึกกิจกรรมรายวัน</h2><div class="desc">รายละเอียดการออกกำลังกาย การนอน และการดื่มน้ำ</div>
+ <div style="overflow-x:auto">
+ <table>
+  <thead><tr><th>วันที่</th><th>กิจกรรม</th><th>ระยะเวลา</th><th>นอน</th><th>น้ำดื่ม</th></tr></thead>
+  <tbody>
+   <tr><td>7 ก.ย.</td><td class="activity">🏃 วิ่ง</td><td>30 นาที</td><td>7.5 ชม.</td><td>1.6 ลิตร</td></tr>
+   <tr><td>8 ก.ย.</td><td class="activity">🚴 ปั่นจักรยาน</td><td>45 นาที</td><td>7.0 ชม.</td><td>1.5 ลิตร</td></tr>
+   <tr><td>9 ก.ย.</td><td class="activity">🏃 วิ่ง</td><td>30 นาที</td><td>6.5 ชม.</td><td>1.7 ลิตร</td></tr>
+   <tr><td>10 ก.ย.</td><td class="activity">🚴 ปั่นจักรยาน</td><td>45 นาที</td><td>7.5 ชม.</td><td>1.6 ลิตร</td></tr>
+   <tr><td>11 ก.ย.</td><td class="activity">🏃 วิ่ง</td><td>30 นาที</td><td>8.0 ชม.</td><td>1.5 ลิตร</td></tr>
+   <tr><td>12 ก.ย.</td><td class="activity">🚴 ปั่นจักรยาน</td><td>45 นาที</td><td>7.5 ชม.</td><td>1.7 ลิตร</td></tr>
+   <tr><td>13 ก.ย.</td><td class="activity">🏃 วิ่ง</td><td>30 นาที</td><td>6.5 ชม.</td><td>1.5 ลิตร</td></tr>
+  </tbody>
+ </table>
+ </div>
+</section>
+
+<div class="note"><strong>สรุปเพื่อปรับพฤติกรรม:</strong> ออกกำลังกายสม่ำเสมอและมีเวลารวมดีมาก การนอนเฉลี่ยอยู่ในช่วงแนะนำ แต่มี 2 วันที่นอน 6.5 ชั่วโมง ควรเพิ่มให้ได้อย่างน้อย 7 ชั่วโมง ส่วนปริมาณน้ำควรปรับตามความกระหาย อากาศ และเหงื่อที่เสียไประหว่างออกกำลังกาย</div>
+<footer>Dashboard นี้สรุปจากข้อมูลที่ผู้ใช้ให้ ไม่ใช่การวินิจฉัยทางการแพทย์</footer>
+</main>
+</body>
+</html>
